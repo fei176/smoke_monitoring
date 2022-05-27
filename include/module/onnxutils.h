@@ -16,9 +16,9 @@ namespace onnxutils {
 
 	std::string print_shape(std::vector<int64_t>& shape);
 
-	DataError check_input(std::vector<int64_t>& input, std::vector<int64_t>& target);
+	DataError check_input(const std::vector<int64_t>& input, const std::vector<int64_t>& target);
 
-	DataError check_input(std::vector<std::vector<int64_t>>& input, std::vector<std::vector<int64_t>>& target);
+	DataError check_input(const std::vector<std::vector<int64_t>>& input,const std::vector<std::vector<int64_t>>& target);
 
 	std::string get_error_info(std::vector<std::vector<int64_t>>& input, std::vector<std::vector<int64_t>>& target);
 

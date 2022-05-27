@@ -1,4 +1,6 @@
-#include "transforms.h"
+#include "module/transforms.h"
+#include "module/onnxutils.h"
+
 
 void transforms::normalize(const cv::Mat& sour, cv::Mat& out, const float* mean, const float* std) {
 	std::vector<cv::Mat> image_channels;
@@ -14,28 +16,59 @@ void transforms::normalize(cv::Mat& mat, const float mean, const float std) {
 	mat /= std;
 }
 
-bool transforms::check_data(const cv::Mat& image, const std::vector<int64_t> shape,
+cv::Mat transforms::resize(cv::Mat& mat, bool forced, int target) {
+	cv::Mat resize_img;
+	if (forced) {
+		cv::resize(mat, resize_img, cv::Size(target, target));
+		return resize_img;
+	}
+	int w = mat.cols;
+	int h = mat.rows;
+	int max_size = std::max(w, h);
+	int new_size = std::max(int(target / 32),1) * 32;
+	int new_size_two = 0;
+	int u=0, d=0, l=0, r = 0;
+	if (max_size == w) {
+		new_size_two = h / (w * 1.0 / new_size);
+		w = new_size;
+		h = new_size_two;
+		u = (w - h) / 2;
+		d = w - h - u;
+	}
+	else {
+		new_size_two = w / (h * 1.0 / new_size);
+		h = new_size;
+		w = new_size_two;
+		l = (h - w) / 2;
+		r = h - w - l;
+	}
+	cv::resize(mat, resize_img, cv::Size(w, h));
+	cv::Mat pad_mat;
+	cv::copyMakeBorder(resize_img, pad_mat, u, d, l, r, cv::BorderTypes::BORDER_CONSTANT, cv::Scalar(0.));
+	return pad_mat;
+}
+
+bool transforms::check_data(const std::vector<int64_t> input, const std::vector<int64_t>& target) {
+	return onnxutils::check_input(input, target) == onnxutils::DataError::success;
+}
+
+bool transforms::check_data(const cv::Mat& image, const std::vector<int64_t>& shape,
 	const DataFormat& data_format) {
 	unsigned int h = image.rows;
 	unsigned int w = image.cols;
 	unsigned int c = image.channels();
 
-	int target_c, target_h, target_w;
-
+	std::vector<int64_t> input_shape;
 	if (data_format == DataFormat::CHW) {
-		target_c = shape.at(1);
-		target_h = shape.at(2);
-		target_w = shape.at(3);
+		input_shape = { 1, c,h,w };
 	}
-	else{
-		target_c = shape.at(3);
-		target_h = shape.at(1);
-		target_w = shape.at(2);
+	else {
+		input_shape = { 1,h,w,c};
 	}
-	return (target_c == -1 || h == target_h) && (target_w == -1 || w == target_w) && c == target_c;
+	return onnxutils::check_input(input_shape, shape) == onnxutils::DataError::success;
 }
 
-Ort::Value  transforms::to_tensor(const cv::Mat& image, const std::vector<int64_t> shape,
+Ort::Value  transforms::to_tensor(const cv::Mat& image, const std::vector<int64_t>& shape,
 	const Ort::MemoryInfo& memory_info,
 	std::vector<float>& tensor_data, const DataFormat& data_format) {
 	unsigned int h = image.rows;
@@ -60,7 +93,7 @@ Ort::Value  transforms::to_tensor(const cv::Mat& image, const std::vector<int64_
 /// <param name="tensor_data">tensor source data</param>
 /// <param name="data_format">data format</param>
 /// <returns></returns>
-Ort::Value transforms::make_tensor(const cv::Mat& image, const std::vector<int64_t> shape,
+Ort::Value transforms::make_tensor(const cv::Mat& image, const std::vector<int64_t>& shape,
 	const Ort::MemoryInfo& memory_info,
 	std::vector<float>& tensor_data,
 	const DataFormat& data_format) throw (std::runtime_error) {

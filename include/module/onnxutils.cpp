@@ -1,4 +1,4 @@
-#include "onnxutils.h"
+#include "module/onnxutils.h"
 
 std::string onnxutils::print_shape(std::vector<int64_t>& shape) {
 	std::string format="shape :[";
@@ -10,7 +10,7 @@ std::string onnxutils::print_shape(std::vector<int64_t>& shape) {
 	return format;
 }
 
-onnxutils::DataError onnxutils::check_input(std::vector<int64_t>& input, std::vector<int64_t>& target) {
+onnxutils::DataError onnxutils::check_input(const std::vector<int64_t>& input, const std::vector<int64_t>& target) {
 	if (input.size() != target.size()) {
 		return DataError::bad_dims;
 	}
@@ -25,7 +25,7 @@ onnxutils::DataError onnxutils::check_input(std::vector<int64_t>& input, std::ve
 /// <param name="input">输入数据的shape数组</param>
 /// <param name="target">网络要求数据的shape数组</param>
 /// <returns>匹配状态</returns>
-onnxutils::DataError onnxutils::check_input(std::vector<std::vector<int64_t>>& input, std::vector<std::vector<int64_t>>& target) {
+onnxutils::DataError onnxutils::check_input(const std::vector<std::vector<int64_t>>& input, const std::vector<std::vector<int64_t>>& target) {
 	if (input.size() != target.size()) {
 		return DataError::bad_count;
 	}

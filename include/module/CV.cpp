@@ -1,4 +1,4 @@
-#include "CV.h"
+#include <module/CV.h>
 
 CV::CV() {
 
@@ -7,7 +7,7 @@ CV::CV() {
 cv::Mat CV::normalize(const cv::Mat& mat, const std::vector<float> &mean, const std::vector<float>& std) {
     cv::Mat image;
     if ((mean.size() != 1 || std.size()!=1) && (mean.size() != mat.channels() || mean.size()!=std.size())) {
-        return image;
+        throw std::runtime_error("mean (std) shape don't match the image channels");
     }
     std::vector<float> mean_ = mean;
     std::vector<float> std_ = std;
