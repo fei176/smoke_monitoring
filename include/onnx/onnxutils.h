@@ -5,6 +5,8 @@
 #include <sstream>
 #include <onnxruntime_cxx_api.h>
 #include <onnxruntime_c_api.h>
+#include <opencv2/opencv.hpp>
+#include "functional/transforms.h"
 
 namespace onnxutils {
 	typedef enum clsss {
@@ -15,6 +17,11 @@ namespace onnxutils {
 	} DataError;
 
 	std::string print_shape(std::vector<int64_t>& shape);
+
+	bool check_data(const std::vector<int64_t> input, const std::vector<int64_t>& target);
+
+	bool check_data(const cv::Mat& image, const std::vector<int64_t>& shape,
+		const transforms::DataFormat& data_format);
 
 	DataError check_input(const std::vector<int64_t>& input, const std::vector<int64_t>& target);
 

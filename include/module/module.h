@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 #include <onnxruntime_cxx_api.h>
-#include "onnxutils.h"
+#include "onnx/onnxutils.h"
 
 class Module
 {
@@ -19,8 +19,6 @@ protected:
 	onnxutils::ModelIOInfo model_info;
 	std::shared_ptr<Ort::Session> session;
 private:
-	//Ort::Env env;
-	//Ort::SessionOptions s_o;;
 
 };
 

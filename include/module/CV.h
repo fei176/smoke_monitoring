@@ -1,6 +1,7 @@
 #pragma once
-#include "transforms.h"
+#include "functional/transforms.h"
 #include "module.h"
+
 // in classfy, assume model has only "one" image as the inputs 
 class CV :
     public Module
