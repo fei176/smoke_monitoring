@@ -23,7 +23,7 @@ emm....
 
 Yolox:
 
-<img src="E:\onnx_project\mnist\test\dog.jpg" alt="dog" style="zoom:50%;" /><img src="E:\onnx_project\mnist\test\dog_pred.jpg" alt="dog_pred" style="zoom:50%;" />
+<img src="./result_img/dog.jpg" alt="dog" style="zoom:50%;" /><img src="./result_img/dog_pred.jpg" alt="dog_pred" style="zoom:50%;" />
 
 still working...
 
