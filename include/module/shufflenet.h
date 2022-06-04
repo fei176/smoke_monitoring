@@ -1,5 +1,5 @@
 #pragma once
-#include "CV.h"
+#include "cv.h"
 #include "functional/functional.h"
 
 class Shufflenet :

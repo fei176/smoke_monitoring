@@ -1,6 +1,29 @@
 # smoke_monitoring
-classify and detect smoke、deploying model with onnx
+**Final goal:**
 
-use threadpool to load model, inferrence 
+classify and detect smoke、deploying model with onnx 
 
-use net to receive post and reponse result 
+use c++ 11 features、threadpool and http in this project in order to make this project usefull.
+
+
+
+**Intermediate target：**
+
+Implement some classic and start of art networks.
+
+**1、Classify:**
+
+This type of network is the easiest to implement, so we just get the onnx model,call the forward,then it's over.
+
+
+
+**2、Detection:**
+
+emm....
+
+Yolox:
+
+<img src="E:\onnx_project\mnist\test\dog.jpg" alt="dog" style="zoom:50%;" /><img src="E:\onnx_project\mnist\test\dog_pred.jpg" alt="dog_pred" style="zoom:50%;" />
+
+still working...
+
