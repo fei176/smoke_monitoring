@@ -9,14 +9,24 @@ namespace transforms {
 		HWC = 1
 	} DataFormat;
 
+	// use this to normalize the input mat
+	cv::Mat normalize(const cv::Mat& mat, const std::vector<float>& mean, const std::vector<float>& std);
+
+	//use this, you need to make sure the size of mean data equels sour.channels(),other wise...
 	void normalize(const cv::Mat& sour, cv::Mat& out, const float * mean, const float * std);
 
+	// use this to normalize the input with mean and std.
 	void normalize(cv::Mat& mat, const float mean, const float std);
 
+	cv::Size get_new_size(cv::Mat& img, int max_size, float* ratio_value);
+
+	//design for classify
 	cv::Mat resize(cv::Mat& mat, bool forced, int w, int h, bool center = true,cv::Scalar pad_value = cv::Scalar::all(0.447));
 
+	//design for detection, no left up padding
 	cv::Mat resize(cv::Mat& mat, bool forced, int w, int h, float* ratio, bool center = true, cv::Scalar pad_value = cv::Scalar::all(0.447));
 
+	//design for detection, left up padding
 	cv::Mat resize(cv::Mat& mat, bool forced, int w, int h, int* u_v, int* l_v, float* ratio,bool center = true,cv::Scalar pad_value= cv::Scalar::all(0.447));
 
 	Ort::Value make_tensor(const cv::Mat& image, const std::vector<int64_t>& shape,

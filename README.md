@@ -15,15 +15,14 @@ Implement some classic and start of art networks.
 
 This type of network is the easiest to implement, so we just get the onnx model,call the forward,then it's over.
 
-
+Implemented classic network：resnet、inception、desen set、ghost net、resnetxt with ibn、mobile net、sequeeze net、shuffle net、
 
 **2、Detection:**
 
-emm....
+ori_pic、Yolo、Yolox、Detr
 
-Yolox:
-
-<img src="./result_img/dog.jpg" alt="dog" style="zoom:50%;" /><img src="./result_img/dog_pred.jpg" alt="dog_pred" style="zoom:50%;" />
+<img src="./result_img/dog.jpg" alt="dog" style="zoom:30%;" /><img src="./result_img/dog_pred_yolov5.jpg" alt="dog_pred" style="zoom:30%;" /><img src="./result_img/dog_pred_yolox.jpg" alt="dog_pred" style="zoom:30%;" /><img src="./result_img/dog_pred_detr.jpg" alt="dog_pred" style="zoom:30%;" />
 
 still working...
 
+**3、segmentation**

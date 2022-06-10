@@ -1,10 +1,10 @@
 #pragma once
-#include "cv.h"
+#include "module/module.h"
 #include "functional/functional.h"
 #include "functional/detection.h"
 
 class YoloX :
-    public CV
+    public Module
 {
 public:
     YoloX(int w = 224, int h = 224,
@@ -12,7 +12,7 @@ public:
         const std::vector<float>& mean = { 0., 0., 0. },
         const std::vector<float>& std = { 1., 1., 1. },
         bool fixed_input = true,
-        float nms_thresh = 0.5, float confidence_thresh = 0.1);
+        float nms_thresh = 0.5, float confidence_thresh = 0.25);
 
     cv::Mat preprocess(std::string& img_path, transforms::DataFormat data_format);
     std::vector<Ort::Value> forward(std::string& img_path, Ort::MemoryInfo& mem_info, Ort::RunOptions&,

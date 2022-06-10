@@ -15,6 +15,7 @@ public:
 	virtual ~Module();
 	// env,session options继承自模板类base，base delete 复制构造和operator =,没有使用构造函数一级一级传递，
 	void Init(Ort::Env&,Ort::SessionOptions&,const wchar_t * model_path, Ort::AllocatorWithDefaultOptions& allocator);
+	std::vector<Ort::Value> inference(std::vector < Ort::Value >& inputs, Ort::RunOptions& run_option);
 protected:
 	onnxutils::ModelIOInfo model_info;
 	std::shared_ptr<Ort::Session> session;

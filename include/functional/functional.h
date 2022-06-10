@@ -117,5 +117,5 @@ namespace functional {
 		}
 	}
 
-	void draw_box(cv::Mat& img, std::vector<Box>& boxes);
+	void draw_box(cv::Mat& img, std::vector<Box>& boxes, int mode);
 }
