@@ -25,7 +25,9 @@ namespace onnxutils {
 
 	DataError check_input(const std::vector<int64_t>& input, const std::vector<int64_t>& target);
 
-	DataError check_input(const std::vector<std::vector<int64_t>>& input,const std::vector<std::vector<int64_t>>& target);
+	DataError check_input(const std::vector<std::vector<int64_t>>& input, const std::vector<std::vector<int64_t>>& target);
+
+	bool tyr_adjust_channel(cv::Mat& ori, cv::Mat& out, int channels);
 
 	std::string get_error_info(std::vector<std::vector<int64_t>>& input, std::vector<std::vector<int64_t>>& target);
 
@@ -60,4 +62,4 @@ namespace onnxutils {
 		std::string info;
 		Ort::AllocatorWithDefaultOptions* allocator;
 	};
-}
+};

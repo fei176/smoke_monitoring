@@ -26,3 +26,29 @@ ori_pic、Yolo、Yolox、Detr
 still working...
 
 **3、segmentation**
+
+
+
+
+
+
+
+How to use:
+
+Because of some restrictions, this project run on a fixed directory(windows, cpu only，onnx runtime), for now,it's c:/project
+
+1、unzip the "project.zip" to c:/project
+
+2、cd to c:/project
+
+3、run mnist.exe , default listening on port 127.0.0.1:6573
+
+4、open 127.0.0.1:6573 in browser
+
+5、choose a model，fill out the parameters，it will show the detection result after 0-1s (relying on cpu performance ) in most cases(i hope so,😅）![image-20220615230141944](.\result_img\temp.png)
+
+ 
+
+**Feature work：**
+
+fixed bugs，GPU-supported, more model, write makefile.txt for cross platform supported...

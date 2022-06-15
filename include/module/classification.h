@@ -15,7 +15,7 @@ public:
         bool fixed_input = false,bool batch = false);
 
     virtual cv::Mat preprocess(std::string& img_path, transforms::DataFormat data_format);
-    virtual int forward(std::string& img_path, Ort::MemoryInfo& mem_info, Ort::RunOptions&,
+    int forward(std::string& img_path, Ort::MemoryInfo& mem_info, Ort::RunOptions&,
         transforms::DataFormat data_format = transforms::DataFormat::CHW);
     virtual int postprocess(std::vector<Ort::Value>&);
 private:
