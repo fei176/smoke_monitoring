@@ -35,9 +35,11 @@ still working...
 
 How to use:
 
+quick use：http://120.48.25.3:6573
+
 Because of some restrictions, this project run on a fixed directory(windows, cpu only，onnx runtime), for now,it's c:/project
 
-1、unzip the "project.zip" to c:/project
+1、unzip the "project.zip (uploading) " to c:/project
 
 2、cd to c:/project
 
