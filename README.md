@@ -45,9 +45,9 @@ Because of some restrictions, this project run on a fixed directory(windows, cpu
 
 4、open 127.0.0.1:6573 in browser
 
-5、choose a model，fill out the parameters，it will show the detection result after 0-1s (relying on cpu performance ) in most cases(i hope so,😅）![image-20220615230141944](.\result_img\temp.png)
+5、choose a model，fill out the parameters，it will show the detection result after 0-1s (relying on cpu performance ) in most cases(i hope so,😅）
 
- 
+ <img src="./result_img/temp.png" alt="dog" style="zoom:0%;" />
 
 **Feature work：**
 
