@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="utf-8">
+    <title> Enjoy AI </title>
+    <style>
+        .box2{
+            width:640px;
+            height:640px;
+            display: inline-block;
+            border:5px solid #ccc;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-origin: border-box;
+            background-size: contain;
+        }
+    </style>
+    <style>
+    </style>
+    </head>
+
+    <body>
+        <div class="head part" align="center">
+            <h2><span>Enjoy the model</span></h2>
+            <input id="up_image" type="image" value="" display="none">
+            模型：
+            <select name="model" id="model">
+                <option value="yolov5">yolov5</option>
+                <option value="yolox">yolox</option>
+                <option value="detr">detr</option>
+            </select>
+            宽度：<input type="text" name="height" placeholder="0-1280" id="height">
+            高度：<input type="text" name="width" placeholder="0-1280" id="width">
+            NMS阈值：<input type="text" name="nms_thres" placeholder="0-1" id="nms_thres">
+            置信度阈值：<input type="text" name="conf_thres" placeholder="0-1" id="conf_thres">
+            <input type="file" id="selectFiles" accept="image/png, image/jpg, image/jpeg" onchange="selectfile(this)">
+            <button onclick="upload()" id="sure">确认</button>
+        </div>
+        <br>
+        <div align="center">
+                <img class="box2" id='show_img' style="background-image: url();"</img>
+                <img class="box2" id='show_result' style="background-image: url();"</img>
+        </div>
+        
+    <script type="text/javascript">
+        var map = new Map([["yolov5",0],["yolox",1],["detr",2]])
+        var filebuf;
+        var files = "";
+
+        function upload(){
+            if(files == ""){
+                alert("chonse a file");
+                return;
+            }
+
+            var height = document.getElementById('height').value;
+            if((!isNaN(parseFloat(height))) && isFinite(height)){
+                height = parseFloat(height);
+                if(height>1280 || height<0){
+                    alert("input height error");
+                    return;
+                }
+            }
+            else{
+                alert("input height error");
+                return;
+            }
+
+            var width = document.getElementById('width').value;
+            if((!isNaN(parseFloat(width))) && isFinite(width)){
+                width = parseFloat(width);
+                if(width>1280 || width<0){
+                    alert("input width error");
+                    return;
+                }
+            }
+            else{
+                alert("input width error");
+                return;
+            }
+
+            var nms_thres = document.getElementById('nms_thres').value;
+            if((!isNaN(parseFloat(nms_thres))) && isFinite(nms_thres)){
+                nms_thres = parseFloat(nms_thres);
+                if(nms_thres>1.0 || nms_thres<0){
+                    alert("input nms_thres error");
+                    return;
+                }
+            }
+            else{
+                alert("input nms_thres error");
+                return;
+            }
+            
+            var conf_thres = document.getElementById('conf_thres').value;
+            if((!isNaN(parseFloat(conf_thres))) && isFinite(conf_thres)){
+                conf_thres = parseFloat(conf_thres);
+                if(conf_thres>1.0 || conf_thres<0){
+                    alert("input conf_thres error");
+                    return;
+                }
+            }
+            else{
+                alert("input conf_thres error");
+                return;
+            }
+            
+            var botton = document.getElementById('sure');
+            botton.setAttribute('disabled', '');
+
+            var a = new Float32Array(5);
+            model = document.getElementById('model')
+            a[0] = map.get(model.options[model.selectedIndex].value);
+            a[1] = height;
+            a[2] = width;
+            a[3] = nms_thres;
+            a[4] = conf_thres;
+            
+            total_size = a.byteLength  + filebuf.byteLength;
+            padding = Math.ceil(total_size / 4) * 4 - total_size;
+            if(padding == 0){
+                padding = 4
+            }
+
+            var buffer = new ArrayBuffer(total_size + padding);
+            
+            var floatview = new Float32Array(buffer).set(a);
+            var byteview = new Uint8Array(buffer)
+            byteview[20] = padding;
+            var byteview = new Uint8Array(buffer).set(filebuf,20+padding);
+
+            var img_result = document.getElementById('show_result');
+            var xhr = new XMLHttpRequest();
+            xhr.responseType="blob";
+            xhr.open('post','127.0.0.1:6573',true);
+            xhr.onload = function(){
+                if(this.status == 200){
+                    var blob = this.response;
+                    img_result.onload = function(e){
+                        window.URL.revokeObjectURL(img_result.style.backgroundImage);
+                    }
+                    objurl = window.URL.createObjectURL(blob);
+                    img_result.style.backgroundImage = `url(${objurl})`
+                    botton.removeAttribute('disabled');
+                }
+            }
+            xhr.send(buffer);
+        }
+
+        function selectfile(obj){
+            function getObjectURL(file) { 
+                var url = null; 
+                if (window.createObjcectURL != undefined) { 
+                    url = window.createOjcectURL(file); 
+                } else if (window.URL != undefined) { 
+                    url = window.URL.createObjectURL(file); 
+                } else if (window.webkitURL != undefined) { 
+                    url = window.webkitURL.createObjectURL(file); 
+                } 
+                return url; 
+            }
+            filename = obj.files[0].name;
+            if(filename.search('png')==-1 && filename.search('jpg')==-1 && filename.search('jpeg')==-1){
+                alert('please choose an image file (support: png, jpg, jpeg)');
+                files = "";
+                return;
+            }
+
+            objurl = getObjectURL(obj.files[0]);
+            var img_show = document.getElementById('show_img');
+            img_show.style.backgroundImage = `url(${objurl})`;
+
+            var reader = new FileReader();
+            reader.onload = function(){
+                // alert(reader.result);
+                filebuf = new Uint8Array(reader.result);
+                files = filename;
+            }
+            reader.readAsArrayBuffer(obj.files[0]);           
+        }
+    </script>
+    </body>
+</html>
