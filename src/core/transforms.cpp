@@ -77,8 +77,11 @@ cv::Mat transforms::resize(cv::Mat& mat, bool forced, int new_w,int new_h,int * 
 	*ratio_value = ratio;
 	int temp_h = int(std::round(ratio * h));
 	int temp_w = int(std:: round(ratio * w));
-	if (temp_h != h && temp_w != w) {
+	if (temp_h != h || temp_w != w) {
 		cv::resize(mat, resize_img, cv::Size(temp_w, temp_h));
+	}
+	else {
+		resize_img = mat;
 	}
 	int u=0, d=0, l=0, r = 0;
 	if (center) {
