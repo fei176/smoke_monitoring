@@ -46,7 +46,6 @@ void SServer::run() {
 	{
 		tcp::socket socket{ ico };
 		net_acceptor.accept(socket);
-		std::cout << "create a new socket!!!" << std::endl;
 		std::thread{ std::bind(
 				&SServer::session,
 				this,
@@ -62,9 +61,9 @@ void SServer::session(boost::asio::ip::tcp::socket& stream) {
 	for (;;)
 	{
 		http::request<http::string_body> req;
-		http::request_parser<http::string_body> parser; \
+		http::request_parser<http::string_body> parser;
 
-			parser.body_limit(1024 * 1024 * 100);
+		parser.body_limit(1024 * 1024 * 100);
 		http::read(stream, buffer, parser, ec);
 		if (ec == http::error::end_of_stream)
 			break;
@@ -78,13 +77,11 @@ void SServer::session(boost::asio::ip::tcp::socket& stream) {
 			return fail(ec, "write");
 		if (close)
 		{
-			std::cout << "close a new socket!!!" << std::endl;
 			break;
 		}
 		stream.shutdown(tcp::socket::shutdown_send, ec);
 	}
 }
-
 
 void SServer::fail(boost::beast::error_code ec, char const* what) {
 	std::cout << what << "; " << ec.message() << std::endl;

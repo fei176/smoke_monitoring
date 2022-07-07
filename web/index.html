@@ -28,6 +28,10 @@
                 <option value="yolov5">yolov5</option>
                 <option value="yolox">yolox</option>
                 <option value="detr">detr</option>
+                <!-- <option value="yolos">yolos</option> -->
+                <option value="ssd">ssd</option>
+                <option value="yolov6">yolov6</option>
+                <option value="fcos">fcos</option>
             </select>
             宽度：<input type="text" name="height" placeholder="224-1280(网络处理使用)" id="height">
             高度：<input type="text" name="width" placeholder="224-1280(网络处理使用)" id="width">
@@ -43,7 +47,7 @@
         </div>
         
     <script type="text/javascript">
-        var map = new Map([["yolov5",0],["yolox",1],["detr",2]])
+        var map = new Map([["yolov5",0],["yolox",1],["detr",2],["yolos",3],["ssd",4],["yolov6",5],["fcos",6]])
         var filebuf;
         var files = "";
         var running = false;
