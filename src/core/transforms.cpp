@@ -1,5 +1,5 @@
-#include "functional/transforms.h"
-#include "onnx/onnxutils.h"
+#include "core/transforms.h"
+#include "core/onnxutils.h"
 
 cv::Mat transforms::normalize(const cv::Mat& mat, const std::vector<float>& mean, const std::vector<float>& std) {
 	cv::Mat image;
@@ -32,11 +32,14 @@ void transforms::normalize(cv::Mat& mat, const float mean, const float std) {
 	mat /= std;
 }
 
-cv::Size transforms::get_new_size(cv::Mat& img, int max_size,float * ratio_value) {
+// ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½ï¿½Â´ï¿½Ð¡ï¿½ï¿½detrÊ¹ï¿½Ã£ï¿½ï¿½ï¿½Îªï¿½ä²»ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª32ï¿½Ä±ï¿½ï¿½Ê£ï¿½Ö±ï¿½ï¿½ï¿½Òµï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½É£ï¿½
+cv::Size transforms::get_new_size(cv::Mat& img, int max_size,float * ratio_value, bool only_zoom_out) {
 	int h = img.rows;
 	int w = img.cols;
 	float ratio = std::min(max_size * 1.0 / h, max_size * 1.0 / w);
-	ratio = std::min(ratio, float(1.0));
+	if (only_zoom_out) {
+		ratio = std::min(ratio, float(1.0));
+	}
 	*ratio_value = ratio;
 	return cv::Size(int(w * ratio), int(h * ratio));
 }
@@ -49,12 +52,12 @@ cv::Mat transforms::resize(cv::Mat& mat, bool forced, int new_w, int new_h, bool
 
 cv::Mat transforms::resize(cv::Mat& mat, bool forced, int new_w, int new_h, float* ratio, bool center, cv::Scalar pad_value) {
 	int u, l;
-	return resize(mat, forced, new_w, new_w, &u, &l, ratio, center, pad_value);
+	return resize(mat, forced, new_w, new_h, &u, &l, ratio, center, pad_value);
 }
 
 /// <summary>
-/// ½«ÊäÈëÍ¼Ïñ£¨³¤±ß£©resizeµ½²»´óÓÚtargetµÄ×î½Ó½ü32±¶ÊýµÄ´óÐ¡£¬Ëæºó¶Ô¶Ì±ß²¹Áã if forced=false;
-/// Ç¿ÐÐresizeµ½hw´óÐ¡£¬if forced=true.
+/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ñ£¨³ï¿½ï¿½ß£ï¿½resizeï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½targetï¿½ï¿½ï¿½ï¿½Ó½ï¿½32ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶Ì±ß²ï¿½Öµ if forced=false;
+/// Ç¿ï¿½ï¿½resizeï¿½ï¿½hwï¿½ï¿½Ð¡ï¿½ï¿½if forced=true.
 /// </summary>
 /// <param name="mat"></param>
 /// <param name="forced"></param>
@@ -66,6 +69,9 @@ cv::Mat transforms::resize(cv::Mat& mat, bool forced, int new_w,int new_h,int * 
 	int w = mat.cols;
 	if (forced) {
 		// if force 
+		*u_v = 0;
+		*l_v = 0;
+		*ratio_value = 0;
 		if (h != new_h && w != new_w) {
 			cv::resize(mat, resize_img, cv::Size(new_w, new_h));
 			return resize_img;
@@ -102,7 +108,7 @@ cv::Mat transforms::resize(cv::Mat& mat, bool forced, int new_w,int new_h,int * 
 }
 
 /// <summary>
-/// ¸ù¾Ýcv::Mat¹¹ÔìÒ»¸ötensor£¬ÊäÈëÊý¾ÝÐÎ×´£¬mem_info,Ò»¸öbuffer[»¹²»ÊÇÄ£°å]£¬tensor format
+/// ï¿½ï¿½ï¿½ï¿½cv::Matï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½tensorï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´ï¿½ï¿½mem_info,Ò»ï¿½ï¿½buffer[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½]ï¿½ï¿½tensor format
 /// </summary>
 /// <param name="image">input image</param>
 /// <param name="shape">target shape</param>
@@ -113,7 +119,7 @@ cv::Mat transforms::resize(cv::Mat& mat, bool forced, int new_w,int new_h,int * 
 Ort::Value transforms::make_tensor(const cv::Mat& image, const std::vector<int64_t>& shape,
 	const Ort::MemoryInfo& memory_info,
 	std::vector<float>& tensor_data,
-	const DataFormat& data_format) throw (std::runtime_error) {
+	const DataFormat& data_format){
 	unsigned int h = image.rows;
 	unsigned int w = image.cols;
 	unsigned int c = image.channels();

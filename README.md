@@ -25,7 +25,7 @@ ori_pic、Yolo、Yolox、Detr
 
 onnx_files:
 
-[Yolo](链接：https://pan.baidu.com/s/1HunafZ8AGq-D5IiE1EnYwg?pwd=1234 提取码：1234) [YoloX](链接：https://pan.baidu.com/s/1CYF-l-WTHcLE_CoC42JVkg?pwd=1234 提取码：1234) [Detr](链接：https://pan.baidu.com/s/1Wahnw0sTb28xRUI558W4PQ?pwd=1234 提取码：1234)
+[Yolov5](链接：https://pan.baidu.com/s/1HunafZ8AGq-D5IiE1EnYwg?pwd=1234 提取码：1234) [YoloX](链接：https://pan.baidu.com/s/1CYF-l-WTHcLE_CoC42JVkg?pwd=1234 提取码：1234) [Detr](链接：https://pan.baidu.com/s/1Wahnw0sTb28xRUI558W4PQ?pwd=1234 提取码：1234) [SSD]((链接：https://pan.baidu.com/s/1Wahnw0sTb28xRUI558W4PQ?pwd=1234 提取码：1234) ) [Fcos](链接：https://pan.baidu.com/s/1iphxv0JM45fedMNG-snQQg?pwd=5xin 提取码：5xin) [yolov6](链接：https://pan.baidu.com/s/1prpFRURdyROI3P6fCB2wsg?pwd=cjmn 提取码：cjmn)
 
 still working...
 
@@ -35,20 +35,20 @@ still working...
 
 quick use：http://120.48.25.3:6573
 
-Because of some restrictions, this project run on a fixed directory(windows, cpu only，onnx runtime), for now,it's c:/project
+opencv is required
 
-1、unzip the "project.zip ([project.zip](链接：https://pan.baidu.com/s/1kpTPmq59DgshMLYbtrJY_g?pwd=1234 提取码：1234)) " to c:/project
+set boost include dir, onnx include dir and onnx lib dir in CMakeLists.txt, than use cmake and make to compile the project, the output file is in ./build
 
-2、cd to c:/project
+how to use: 
 
-3、run mnist.exe , default listening on port 127.0.0.1:6573
+1、./smoke 127.0.0.1 1234 /home/path/to/web/dir /home/path/to/weights/dir
 
-4、open 127.0.0.1:6573 in browser
+2、open 127.0.0.1:1234 in browser
 
-5、choose a model，fill out the parameters，it will show the detection result after 0-1s (relying on cpu performance ) in most cases(i hope so,😅）
+3、choose a model，fill out the parameters，it will show the detection result after 0-1s (relying on cpu performance ) in most cases(i hope so,😅）
 
  <img src="./result_img/temp.png" alt="dog" style="zoom:0%;" />
 
 **Feature work：**
 
-fixed bugs，GPU-supported, more model, write makefile.txt for cross platform supported...
+GPU-supported, more models....

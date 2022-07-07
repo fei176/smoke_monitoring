@@ -1,6 +1,6 @@
 #pragma once
-#include "functional/transforms.h"
-#include "functional/functional.h"
+#include "core/transforms.h"
+#include "core/functional.h"
 #include "module.h"
 
 // in classfy, assume model has only "one" image as the inputs 

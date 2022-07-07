@@ -1,4 +1,4 @@
-#include "functional/functional.h"
+#include "core/functional.h"
 
 void functional::remove_low_confidence(float conf_threshold, std::vector<Box>& boxes,int offset) {
 	int slow = 0;
@@ -119,8 +119,9 @@ void functional::draw_box(cv::Mat& img, std::vector<Box>& boxes,int mode) {
 	}
 	for (auto& box : boxes) {
 		cv::rectangle(img, box.rect(), DetectionHelper::get_color(box.label),2);
+		cv::rectangle(img,box.text_rect(), DetectionHelper::get_color(box.label), -1);
 		std::string text = DetectionHelper::get_name_coco(box.label, mode);
 		text += std::to_string(box.conf).substr(0, 4);
-		cv::putText(img, text, box.text(), cv::FONT_HERSHEY_SIMPLEX, 0.6f, DetectionHelper::get_color(box.label));
+		cv::putText(img, text, box.text(), cv::FONT_HERSHEY_SIMPLEX, 0.6f, cv::Scalar(255,255,255),1);
 	}
 }
